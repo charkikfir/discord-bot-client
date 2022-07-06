@@ -20,6 +20,14 @@ server.listen(3000, () => {
   console.log(`GitHub: `.yellow + colors.green(`github.com/fosscord/fosscord`));
 });
 
+const corsOptions = {
+  origin: "*",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+
+server.use(cors(corsOptions));
+
 server.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -74,6 +82,7 @@ async function createWindow() {
         "https://discord.com/api/v6/users/@me/guilds",
         "https://discord.com/api/v6/users/@me/guilds/premium",
         "https://discord.com/api/v6/users/@me/guilds/premium/subscriptions",
+        "https://discord.com/api/v6/experiments",
       ].includes(details.url) ||
       details.url.includes("https://discord.com/api/v6/users/@me/billing/trials/") ||
       details.url.includes("https://discord.com/api/v6/users/@me/applications/")
