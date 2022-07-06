@@ -10,19 +10,19 @@ const server = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
-const myUrl = "http://localhost:3000/login";
+const myUrl = "http://localhost:2000/login";
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(express.static(path.join(__dirname, "public")));
-server.listen(3000, () => {
-  console.log(`The express server is running on port 3000`.green);
-  console.log(`http://localhost:3000`.yellow);
+server.listen(2000, () => {
+  console.log(`The express server is running on port 2000`.green);
+  console.log(`http://localhost:2000`.yellow);
   console.log(`You should also try out `.yellow + colors.green(`fosscord.com`));
   console.log(`GitHub: `.yellow + colors.green(`github.com/fosscord/fosscord`));
 });
 
 const corsOptions = {
   origin: "*",
-  credentials: true, //access-control-allow-credentials:true
+  credentials: true,
   optionSuccessStatus: 200,
 };
 
