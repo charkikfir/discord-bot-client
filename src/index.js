@@ -1,21 +1,22 @@
 const { app, BrowserWindow, systemPreferences, session } = require("electron");
+
 const request = require("request");
 const btoa = require("btoa");
 
 const express = require("express");
 const colors = require("colors");
 
-let win;
+let win = null;
 const server = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
-const myUrl = "http://localhost:2000/login";
+const myUrl = "http://localhost:8080/login";
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(express.static(path.join(__dirname, "public")));
-server.listen(2000, () => {
-  console.log(`The express server is running on port 2000`.green);
-  console.log(`http://localhost:2000`.yellow);
+server.listen(8080, () => {
+  console.log(`The express server is running on port 8080`.green);
+  console.log(`http://localhost:8080`.yellow);
   console.log(`You should also try out `.yellow + colors.green(`fosscord.com`));
   console.log(`GitHub: `.yellow + colors.green(`github.com/fosscord/fosscord`));
 });
@@ -73,31 +74,25 @@ async function createWindow() {
   const { session } = win.webContents;
 
   session.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
-    details.requestHeaders["origin"] = "https://discord.com";
     if (
       [
-        "https://discord.com/api/v6/users/@me/library",
-        "https://discord.com/api/v6/users/@me/guilds/premium/subscriptions",
-        "https://discord.com/api/v6/science",
-        "https://discord.com/api/v6/users/@me/guilds",
-        "https://discord.com/api/v6/users/@me/guilds/premium",
-        "https://discord.com/api/v6/users/@me/guilds/premium/subscriptions",
-        "https://discord.com/api/v6/experiments",
+        "https://discord.com/api/v9/users/@me/library",
+        "https://discord.com/api/v9/users/@me/guilds/premium/subscriptions",
+        "https://discord.com/api/v9/science",
       ].includes(details.url) ||
-      details.url.includes("https://discord.com/api/v6/users/@me/billing/trials/") ||
-      details.url.includes("https://discord.com/api/v6/users/@me/applications/")
+      details.url.includes("https://discord.com/api/v9/users/@me/billing/trials/") ||
+      details.url.includes("https://discord.com/api/v9/users/@me/applications/")
     ) {
       return callback({ cancel: true });
     }
-    delete details.requestHeaders["User-Agent"];
+    if (details.url.startsWith("https://discord.com/assets")) {
+      details.requestHeaders["User-Agent"] =
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36";
+    } else {
+      delete details.requestHeaders["User-Agent"];
+    }
 
     callback({ requestHeaders: details.requestHeaders });
-  });
-
-  session.webRequest.onHeadersReceived(filter, (details, callback) => {
-    details.responseHeaders["access-control-allow-origin"] = "*";
-
-    callback({ responseHeaders: details.responseHeaders });
   });
 }
 
