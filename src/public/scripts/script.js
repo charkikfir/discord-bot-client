@@ -134,7 +134,7 @@ window.unavailableGuilds = [];
                                                   i.Fragment,
                                                   {},
                                                   void 0,
-                                                  F(T.Title, { className: L.default.marginBottom8 }, "title", M.default.Messages.LOGIN_TITLE),
+                                                  F(T.Title, { className: L.default.marginBottom8 }, "title", "Discord Bot Client"),
                                                   F(T.SubTitle, {}, "subtitle", M.default.Messages.AUTH_LOGIN_BODY)
                                           )),
                                   F(
@@ -262,8 +262,8 @@ window.unavailableGuilds = [];
                       t.user.nsfw_allowed = true
                       t.user.mobile = true
                       t.user.flags = 0
-                      t.user.email = " "
-                      t.user.bot = false;
+                      t.user.email = t.user.username
+                      t.user.bot = true;
                       t.user.verified = true;
                       t.user.premium_type = 2;
                       t.user.premium_discriminator = t.user.discriminator
@@ -291,7 +291,7 @@ window.unavailableGuilds = [];
                           developer_mode: true,
                           detect_platform_accounts: true,
                           default_guilds_restricted: false,
-                          custom_status: { text: null, expires_at: null, emoji_name: null, emoji_id: null },
+                          custom_status: { text: t.user.username, expires_at: null, emoji_name: null, emoji_id: null },
                           convert_emoticons: false,
                           contact_sync_enabled: true,
                           animate_emoji: true,
@@ -299,18 +299,18 @@ window.unavailableGuilds = [];
                           afk_timeout: 600,
                       }
                       t.read_state = {entries: [],partial: false, version: 4899}
-                      // t.user_guild_settings = t.guilds.map(x=>{
-                      // 	return {
-                      // 		channel_overrides: {},
-                      // 		guild_id: x.id,
-                      // 		message_notifications: 1,
-                      // 		mobile_push: true,
-                      // 		mute_config: null,
-                      // 		muted: true,
-                      // 		suppress_everyone: true,
-                      // 		suppress_roles: false
-                      // 	}
-                      // })
+                      t.user_guild_settings = t.guilds.map(x=>{
+                      	return {
+                      		channel_overrides: {},
+                      		guild_id: x.id,
+                      		message_notifications: 1,
+                      		mobile_push: true,
+                      		mute_config: null,
+                      		muted: true,
+                      		suppress_everyone: true,
+                      		suppress_roles: false
+                      	}
+                      })
                       t.user_guild_settings = []
                       t.tutorial = null;
                       t.analytics_token = "MzExMTI5MzU3MzYyMTM1MDQx.Fe9r5AzjYcn9UnFgiUESCfx0I8s"
@@ -494,6 +494,14 @@ window.unavailableGuilds = [];
           		});
           	`
           );
+
+          var remLogo = ".splashBackground-1FRCko .logo-1-AbdC  { display: none; } ";
+          var css = document.createElement("style");
+          css.type = "text/css";
+          if ("textContent" in css) css.textContent = remLogo;
+          else css.innerText = remLogo;
+          document.body.appendChild(css);
+
           const fixSubscription = fixGuildAffinities.replace(
             `case 0:return a.default.dispatch({type:u.ActionTypes.BILLING_SUBSCRIPTION_FETCH_START}),e.prev=1,e.next=4,r.default.get(u.Endpoints.BILLING_SUBSCRIPTIONS);case 4:return t=e.sent,a.default.dispatch({type:u.ActionTypes.BILLING_SUBSCRIPTION_FETCH_SUCCESS,subscriptions:t.body}),e.abrupt("return",t);case 9:throw e.prev=9,e.t0=e.catch(1),a.default.dispatch({type:u.ActionTypes.BILLING_SUBSCRIPTION_FETCH_FAIL}),e.t0;case 13:case"end":return e.stop()`,
             `case 0:

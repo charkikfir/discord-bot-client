@@ -1,12 +1,8 @@
 const { app, BrowserWindow, systemPreferences, session } = require("electron");
-
-const request = require("request");
-const btoa = require("btoa");
-
+const axios = require("axios");
 const express = require("express");
 const colors = require("colors");
 
-let win = null;
 const server = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -47,13 +43,29 @@ server.get("/app", (req, res) => {
   res.setHeader("Access-Control-Allow-Credentials-Only", true);
 });
 
+server.get(":endpoint([\\/\\w\\.-]*)", (req, res) => {
+  let endpoint = "https://discord.com/" + req.params[0];
+
+  axios
+    .get(endpoint)
+    .then((response) => {
+      res.setHeader("Content-Type", response.headers["content-type"]);
+      res.send(response.data);
+    })
+    .catch(() => {
+      res.sendStatus(404);
+    });
+});
+
 async function createWindow() {
   let win = new BrowserWindow({
     width: 1280,
     height: 720,
     autoHideMenuBar: true,
     icon: __dirname + "/appAssets/app.ico",
+    title: "Discord Bot Client",
     webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
       webSecurity: true,
       nodeIntegration: false,
       enableRemoteModule: false,
