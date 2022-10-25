@@ -13,7 +13,7 @@
 - **Messages** (Send, View History, Embeds, View Reactions, Add/Remove Reactions, Delete, Edit, Pin)
 - **Create a Guild** (if the bot has fewer than 10 Servers)
 - **Voice Support**
-- **See Guild members in the side bar** (you can see them in the server dropdown menu under members)
+- *a*See Guild members in the side bar** (you can see them in the server dropdown menu under members)
 - **Use Emojis from other servers** (Nitro)
 - **GIF Search**
 - **Send Files**
